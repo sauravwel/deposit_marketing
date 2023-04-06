@@ -6,5 +6,6 @@ xgboost
 catboost
 matplotlib
 category_encoders
+dill
 
 -e .
