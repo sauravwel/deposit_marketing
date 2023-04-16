@@ -24,7 +24,7 @@ class DataTransformation:
 
     def get_data_transformer_object(self):
         '''
-        This function is responsible for data trnasformation
+        This function is responsible for data transformation
         
         '''
         try:
@@ -70,8 +70,8 @@ class DataTransformation:
     def initiate_data_transformation(self,train_path,test_path):
 
         try:
-            train_df=pd.read_csv(train_path, sep=';')
-            test_df=pd.read_csv(test_path , sep=';')
+            train_df=pd.read_csv(train_path)
+            test_df=pd.read_csv(test_path)
 
             logging.info("Read train and test data completed")
 
@@ -79,13 +79,13 @@ class DataTransformation:
 
             preprocessing_obj=self.get_data_transformer_object()
 
-            target_column_name= "y"
-            
+            target_column_name= 'y'
+            print(train_df.columns)
             input_feature_train_df=train_df.drop(target_column_name,axis=1)
-            target_feature_train_df=train_df.target_column_name.map({'no':0, 'yes':1}).astype('uint8')
+            target_feature_train_df=train_df[target_column_name].map({'no':0, 'yes':1}).astype('uint8')
 
             input_feature_test_df=test_df.drop(target_column_name,axis=1)
-            target_feature_test_df=test_df.target_column_name.map({'no':0, 'yes':1}).astype('uint8')
+            target_feature_test_df=test_df[target_column_name].map({'no':0, 'yes':1}).astype('uint8')
 
             logging.info(
                 f"Applying preprocessing object on training dataframe and testing dataframe."
