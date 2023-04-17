@@ -26,7 +26,7 @@ class ModelTrainer:
     def __init__(self):
         self.model_trainer_config=ModelTrainerConfig()
 
-         def initiate_model_trainer(self,train_array,test_array):
+    def initiate_model_trainer(self,train_array,test_array):
         try:
             logging.info("Split training and test input data")
             X_train,y_train,X_test,y_test=(
@@ -38,44 +38,45 @@ class ModelTrainer:
 
             models = {
                 'lr': LogisticRegression(),
-                'rf', RandomForestClassifier(),
-                'knn', KNeighborsClassifier(),
-                'dt', DecisionTreeClassifier(),
-                'bag',BaggingClassifier(),
-                'sgd', SGDClassifier(),
-                'xgb',XGBClassifier()
+                'rf': RandomForestClassifier(),
+                'knn': KNeighborsClassifier(),
+                'dt': DecisionTreeClassifier(),
+                'bag': BaggingClassifier(),
+                'sgd': SGDClassifier(),
+                'xgb': XGBClassifier(),
             }
-             params={
+
+            params = {
                 'lr' : {
-                'lr__penalty': ['l2'],
-                'lr__C': [0.3, 0.6, 0.7],
-                'lr__solver': ['sag']
+                    'penalty': ['l2'],
+                    'C': [0.3, 0.6, 0.7],
+                    'solver': ['sag']
                 },
                 'rf' : {
-                'rf__criterion': ['entropy'],
-                'rf__min_samples_leaf': [80, 100],
-                'rf__max_depth': [25, 27],
-                'rf__min_samples_split': [3, 5],
-                'rf__n_estimators' : [60, 70]
+                    'criterion': ['entropy'],
+                    'min_samples_leaf': [80, 100],
+                    'max_depth': [25, 27],
+                    'min_samples_split': [3, 5],
+                    'n_estimators' : [60, 70]
                 },
-                'knn':{'knn__n_neighbors': [16,17,18]},
+                'knn':{'n_neighbors': [16,17,18]},
                 'dt' : {
-                'dt__max_depth': [8, 10],
-                'dt__min_samples_leaf': [1, 3, 5, 7]
+                    'max_depth': [8, 10],
+                    'min_samples_leaf': [1, 3, 5, 7]
                   },
-                'bag': {'bag__n_estimators': [10, 15, 20]},
+                'bag': {'n_estimators': [10, 15, 20]},
                 'sgd': {
-                    'sgd__loss': ['log', 'huber'],
-                    'sgd__learning_rate': ['adaptive'],
-                    'sgd__eta0': [0.001, 0.01, 0.1],
-                    'sgd__penalty': ['l1', 'l2', 'elasticnet'], 
-                    'sgd__alpha':[0.1, 1, 5, 10]
+                    'loss': ['log', 'huber'],
+                    'learning_rate': ['adaptive'],
+                    'eta0': [0.001, 0.01, 0.1],
+                    'penalty': ['l1', 'l2', 'elasticnet'], 
+                    'alpha':[0.1, 1, 5, 10]
                     },
                 'xgb':  {
                     'max_depth': [3, 5, 7],
-                    'learning_rate': [0.1, 0.01, 0.001],
-                    'n_estimators': [50, 100, 200],
-                    'gamma': [0, 0.1, 0.5]
+                    'learning_rate': [0.1],
+                    'n_estimators': [50],
+                    'gamma': [0, 0.1]
                    }
              }
             model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
