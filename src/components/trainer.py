@@ -12,6 +12,17 @@ from sklearn.pipeline import Pipeline
 from sklearn.linear_model import SGDClassifier
 from xgboost import XGBClassifier
 
+from sklearn.neural_network import MLPClassifier
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.wrappers.scikit_learn import KerasClassifier
+from keras.layers import Dropout
+from keras.callbacks import EarlyStopping
+
+
+import warnings
+warnings.filterwarnings('ignore')
+
 from src.exception import CustomException
 from src.logger import logging
 
@@ -36,6 +47,14 @@ class ModelTrainer:
                 test_array[:,-1]
             )
 
+            def create_nn(activation='relu', optimizer='adam', dropout_rate=0.2):
+                model = Sequential()
+                model.add(Dense(10, input_dim= 43, activation=activation.lower()))
+                model.add(Dense(16,activation='tanh'))
+                model.add(Dense(1, activation='sigmoid'))
+                model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+                return model
+
             models = {
                 'lr': LogisticRegression(),
                 'rf': RandomForestClassifier(),
@@ -44,6 +63,8 @@ class ModelTrainer:
                 'bag': BaggingClassifier(),
                 'sgd': SGDClassifier(),
                 'xgb': XGBClassifier(),
+                 'NN' : KerasClassifier(build_fn=create_nn, activation='relu',callbacks=[EarlyStopping(monitor='accuracy', patience=3)]),
+                
             }
 
             params = {
@@ -77,7 +98,13 @@ class ModelTrainer:
                     'learning_rate': [0.1],
                     'n_estimators': [50],
                     'gamma': [0, 0.1]
-                   }
+                   },
+                'NN': {
+                   'batch_size': [256],
+                   'epochs': [2,4,8],
+                   'optimizer': ['adam', 'rmsprop'],
+                   'activation': ['relu', 'sigmoid']
+                    }
              }
             model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
                                              models=models,param=params)
@@ -95,7 +122,7 @@ class ModelTrainer:
 
             if best_model_score<0.5:
                 raise CustomException("No best model found")
-            logging.info(f"Best found model on both training and testing dataset")
+            logging.info(f"Found model on both training and testing dataset")
 
             save_object(
                 file_path=self.model_trainer_config.trained_model_file_path,
@@ -104,8 +131,9 @@ class ModelTrainer:
 
             predicted=best_model.predict_proba(X_test)
             auc = roc_auc_score(y_test,predicted[:,1])
+            logging.info("Best model is {} and its value is {:.2f}".format(best_model_name, auc))
 
-            return auc
+            return auc, best_model_name
 
 
         except Exception as e:

@@ -7,5 +7,7 @@ catboost
 matplotlib
 category_encoders
 dill
+keras
+tensorflow
 
 -e .
