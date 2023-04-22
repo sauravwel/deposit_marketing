@@ -100,7 +100,7 @@ class ModelTrainer:
                     'gamma': [0, 0.1]
                    },
                 'NN': {
-                   'batch_size': [256],
+                   'batch_size': [32,64,128,256],
                    'epochs': [2,4,8],
                    'optimizer': ['adam', 'rmsprop'],
                    'activation': ['relu', 'sigmoid']
@@ -131,7 +131,7 @@ class ModelTrainer:
 
             predicted=best_model.predict_proba(X_test)
             auc = roc_auc_score(y_test,predicted[:,1])
-            logging.info("Best model is {} and its value is {:.2f}".format(best_model_name, auc))
+            logging.info("Best model is {} and its AUC value is {:.2f}".format(best_model_name, auc))
 
             return auc, best_model_name
 

@@ -1,0 +1,13 @@
+[ 2023-04-23 00:01:33,772 ] 26 root - INFO - Entered the data ingestion method or component
+[ 2023-04-23 00:01:33,990 ] 29 root - INFO - Read the dataset as dataframe
+[ 2023-04-23 00:01:34,683 ] 35 root - INFO - Train test split initiated
+[ 2023-04-23 00:01:35,406 ] 42 root - INFO - Ingestion of the data is completed
+[ 2023-04-23 00:01:35,655 ] 142 root - INFO - Read train and test data completed
+[ 2023-04-23 00:01:35,656 ] 144 root - INFO - Obtaining preprocessing object
+[ 2023-04-23 00:01:35,656 ] 117 root - INFO - Categorical columns: ['job', 'marital', 'education', 'default', 'housing', 'loan', 'contact', 'month', 'day_of_week', 'poutcome']
+[ 2023-04-23 00:01:35,657 ] 118 root - INFO - Numerical columns: ['age', 'duration', 'campaign', 'pdays', 'previous', 'emp.var.rate', 'cons.price.idx', 'cons.conf.idx', 'euribor3m', 'nr.employed']
+[ 2023-04-23 00:01:35,666 ] 154 root - INFO - Applying preprocessing object on training dataframe and testing dataframe.
+[ 2023-04-23 00:01:36,318 ] 163 root - INFO - Saved preprocessing object.
+[ 2023-04-23 00:01:36,320 ] 42 root - INFO - Split training and test input data
+[ 2023-04-23 00:11:29,192 ] 125 root - INFO - Found model on both training and testing dataset
+[ 2023-04-23 00:11:29,364 ] 134 root - INFO - Best model is xgb and its AUC value is 0.79

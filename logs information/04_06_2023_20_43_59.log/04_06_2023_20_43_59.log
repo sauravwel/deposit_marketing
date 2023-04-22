@@ -1,0 +1,8 @@
+[ 2023-04-06 20:44:01,730 ] 26 root - INFO - Entered the data ingestion method or component
+[ 2023-04-06 20:44:01,867 ] 29 root - INFO - Read the dataset as dataframe
+[ 2023-04-06 20:44:02,209 ] 35 root - INFO - Train test split initiated
+[ 2023-04-06 20:44:02,521 ] 42 root - INFO - Ingestion of the data is completed
+[ 2023-04-06 20:44:02,677 ] 76 root - INFO - Read train and test data completed
+[ 2023-04-06 20:44:02,692 ] 78 root - INFO - Obtaining preprocessing object
+[ 2023-04-06 20:44:02,692 ] 54 root - INFO - Categorical columns: ['job', 'marital', 'education', 'default', 'housing', 'loan', 'contact', 'month', 'day_of_week', 'poutcome']
+[ 2023-04-06 20:44:02,692 ] 55 root - INFO - Numerical columns: ['age', 'duration', 'campaign', 'pdays', 'previous', 'emp.var.rate', 'cons.price.idx', 'cons.conf.idx', 'euribor3m', 'nr.employed']

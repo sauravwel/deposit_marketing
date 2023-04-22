@@ -1,0 +1,13 @@
+[ 2023-04-22 23:25:52,378 ] 26 root - INFO - Entered the data ingestion method or component
+[ 2023-04-22 23:25:52,856 ] 29 root - INFO - Read the dataset as dataframe
+[ 2023-04-22 23:25:53,787 ] 35 root - INFO - Train test split initiated
+[ 2023-04-22 23:25:54,670 ] 42 root - INFO - Ingestion of the data is completed
+[ 2023-04-22 23:25:54,908 ] 142 root - INFO - Read train and test data completed
+[ 2023-04-22 23:25:54,908 ] 144 root - INFO - Obtaining preprocessing object
+[ 2023-04-22 23:25:54,909 ] 117 root - INFO - Categorical columns: ['job', 'marital', 'education', 'default', 'housing', 'loan', 'contact', 'month', 'day_of_week', 'poutcome']
+[ 2023-04-22 23:25:54,909 ] 118 root - INFO - Numerical columns: ['age', 'duration', 'campaign', 'pdays', 'previous', 'emp.var.rate', 'cons.price.idx', 'cons.conf.idx', 'euribor3m', 'nr.employed']
+[ 2023-04-22 23:25:54,946 ] 154 root - INFO - Applying preprocessing object on training dataframe and testing dataframe.
+[ 2023-04-22 23:25:55,705 ] 163 root - INFO - Saved preprocessing object.
+[ 2023-04-22 23:25:55,707 ] 42 root - INFO - Split training and test input data
+[ 2023-04-22 23:28:24,218 ] 93 root - INFO - Found model on both training and testing dataset
+[ 2023-04-22 23:28:24,296 ] 102 root - INFO - Best model is lr and its value is 0.78

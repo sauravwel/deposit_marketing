@@ -13,6 +13,11 @@ from sklearn.metrics import roc_curve, roc_auc_score
 
 def save_object(file_path, obj):
     try:
+        # Check if the file already exists
+        if os.path.exists(file_path):
+            # If it does, remove the file
+            os.remove(file_path)
+
         dir_path = os.path.dirname(file_path)
 
         os.makedirs(dir_path, exist_ok=True)
