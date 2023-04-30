@@ -16,7 +16,47 @@ from src.utils import save_object
 
 @dataclass
 class DataTransformationConfig:
-    preprocessor_obj_file_path=os.path.join('artifacts',"proprocessor.pkl")
+    preprocessor_obj_file_path=os.path.join('artifacts',"preprocessor.pkl")
+
+# function to replace categorical values with binary
+def replace_with_binary(column, mapping,column_name):
+    #print(column)
+    column = column.replace(mapping)
+    #print(f'After {column}')
+    return column
+    #return column.apply(mapping).astype('uint8')
+
+def previous_binary(x):
+    return (x > 0).astype('uint8')
+
+def outlier_treat(x):
+    return x.replace(999,0).astype('uint8')
+
+def sign_change(x):
+    x = x*-1
+    return x.astype('uint8')
+
+def var_rate_transformer(X):
+    emp_var_rate = X
+    emp_var_rate = np.where(emp_var_rate > 0, emp_var_rate * -0.0001, emp_var_rate * 1)
+    emp_var_rate = emp_var_rate * -1
+    emp_var_rate = np.where(emp_var_rate < 1, -np.log(emp_var_rate), np.log(emp_var_rate))
+    X = emp_var_rate.astype('uint8')
+    
+    return X
+
+def keep_column(X):
+    return X
+
+def target_encoding_wrapper(X):
+    target_columns = ['marital', 'education']
+    #print(X)
+    target_encode = ce.target_encoder.TargetEncoder(cols=target_columns, drop_invariant=True, return_df=False, handle_unknown='value', handle_missing='value', min_samples_leaf=1, smoothing=1.0)
+    temp = target_encode.fit_transform(X, X['y'])
+    #print(temp)
+    return temp
+
+
 
 class DataTransformation:
     def __init__(self):
@@ -46,37 +86,8 @@ class DataTransformation:
 
             target_columns = ['marital', 'education', 'y']
 
-            # function to replace categorical values with binary
-            def replace_with_binary(column, mapping,column_name):
-                #print(column)
-                column = column.replace(mapping)
-                #print(f'After {column}')
-                return column
-                #return column.apply(mapping).astype('uint8')
 
-            def previous_binary(x):
-                return (x > 0).astype('uint8')
-
-            def var_rate_transformer(X):
-                emp_var_rate = X
-                emp_var_rate = np.where(emp_var_rate > 0, emp_var_rate * -0.0001, emp_var_rate * 1)
-                emp_var_rate = emp_var_rate * -1
-                emp_var_rate = np.where(emp_var_rate < 1, -np.log(emp_var_rate), np.log(emp_var_rate))
-                X = emp_var_rate.astype('uint8')
-                
-                return X
-
-            def keep_column(X):
-                return X
-
-            def target_encoding_wrapper(X):
-                target_columns = ['marital', 'education']
-                #print(X)
-                target_encode = ce.target_encoder.TargetEncoder(cols=target_columns, drop_invariant=True, return_df=False, handle_unknown='value', handle_missing='value', min_samples_leaf=1, smoothing=1.0)
-                temp = target_encode.fit_transform(X, X['y'])
-                #print(temp)
-                return temp
-
+ 
             # pipeline for binary encoding of categorical columns
             binary_pipeline = Pipeline([
                 ('contact_binary', FunctionTransformer(replace_with_binary, kw_args={'mapping': contact_mapping, 'column_name': 'contact'})),
@@ -84,12 +95,12 @@ class DataTransformation:
                 ('housing_binary', FunctionTransformer(replace_with_binary, kw_args={'mapping': housing_mapping, 'column_name': 'housing'})),
                 ('default_binary', FunctionTransformer(replace_with_binary, kw_args={'mapping': default_mapping, 'column_name': 'default'})),
                 ('poutcome_binary', FunctionTransformer(replace_with_binary, kw_args={'mapping': poutcome_mapping, 'column_name': 'poutcome'})),
-                ('pdays_binary', FunctionTransformer(lambda x: x.replace(999,0).astype('uint8'))),
+                ('pdays_binary', FunctionTransformer(outlier_treat)),
                 ('previous_binary',  FunctionTransformer(previous_binary))
             ])
             #pipeline for sign change for index
             signchange_pipeline = Pipeline([
-                ('confi_idx',FunctionTransformer(lambda x: x.apply(lambda x: -1*x).astype('uint8')))
+                ('confi_idx',FunctionTransformer(sign_change))
             ])
 
             #pipeline for spcial transformations
@@ -162,18 +173,18 @@ class DataTransformation:
             test_arr = np.c_[test_arr]
             logging.info(f"Saved preprocessing object.")
 
-            # save_object(
+            save_object(
 
-            #     file_path=self.data_transformation_config.preprocessor_obj_file_path,
-            #     obj=preprocessing_obj
+                file_path=self.data_transformation_config.preprocessor_obj_file_path,
+                obj=preprocessing_obj
 
-            # )
+            )
 
             return (
                 train_arr,
                 test_arr,
-               # self.data_transformation_config.preprocessor_obj_file_path,
-               5 
+                self.data_transformation_config.preprocessor_obj_file_path,
+               
             )
         except Exception as e:
             raise CustomException(e,sys)
